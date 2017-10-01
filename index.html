@@ -92,7 +92,7 @@
                 args = arguments,
                 evt = d3.event;
 
-            eventQueue.push(function () {
+            eventQueue.unshift(function () {
                 d3.event = evt;
                 fn.apply(context, args);
             })
@@ -101,14 +101,20 @@
 
     function tick(elapsed) {
         if (eventQueue.length > 0) {
-            console.log(eventQueue)
-            var nextFunction = eventQueue.pop()
-            nextFunction()
+            setTimeout(function () {
+                if (eventQueue.length > 0) {
+                    var nextFunction = eventQueue.pop()
+                    nextFunction()
+                }
+
+            }, 50)
+
         }
     }
 
     function updateSvg() {
         sites[0] = d3.mouse(this);
+
         redraw();
     }
 
